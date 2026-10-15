@@ -1,0 +1,20 @@
+path: C:/Users/HP/Desktop/BagCheck-AI/dataset
+
+train: images/train
+val: images/val
+
+names:
+  0: Phone
+  1: Water Bottle
+  2: Charger
+  3: Earbuds
+  4: Keys
+  5: Lip Gloss
+  6: Notebook
+  7: Pen
+  8: Sanitizer
+  9: Sunglasses
+  10: Wallet
+  11: Tiffin
+  12: Tissue Paper
+  13: Towel

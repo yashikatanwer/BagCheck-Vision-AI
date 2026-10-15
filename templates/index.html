@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BagCheck AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+
+<body>
+
+<div class="app">
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+
+        <div class="logo">
+            🎒 BagCheck AI
+        </div>
+
+        <div class="tagline">
+            Never forget the essentials.
+        </div>
+
+    </header>
+
+
+    <!-- ================= HERO ================= -->
+
+    <section class="hero">
+
+        <div class="hero-text">
+
+            <p class="small-title">
+                AI-POWERED BELONGINGS CHECKER
+            </p>
+
+            <h1>
+                Do I have<br>
+                <span>everything?</span>
+            </h1>
+
+            <p>
+                Choose what you're preparing for and BagCheck AI
+                will check whether you have everything you need.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= CHECKLIST SELECTION ================= -->
+
+    <section class="checklist-section">
+
+        <h2>
+            What are you preparing for?
+        </h2>
+
+        <p class="section-subtitle">
+            Choose a checklist to get started
+        </p>
+
+
+        <div class="cards">
+
+            <button
+                class="card"
+                onclick="selectPreset('College')">
+
+                <div class="card-icon">
+                    🎓
+                </div>
+
+                <h3>
+                    College
+                </h3>
+
+                <p>
+                    Essentials for your college day
+                </p>
+
+            </button>
+
+
+
+            <button
+                class="card"
+                onclick="selectPreset('Day Outing')">
+
+                <div class="card-icon">
+                    ☀️
+                </div>
+
+                <h3>
+                    Day Outing
+                </h3>
+
+                <p>
+                    Everything for going out
+                </p>
+
+            </button>
+
+
+
+            <button
+                class="card"
+                onclick="selectPreset('Gym')">
+
+                <div class="card-icon">
+                    🏋️
+                </div>
+
+                <h3>
+                    Gym
+                </h3>
+
+                <p>
+                    Your workout essentials
+                </p>
+
+            </button>
+
+
+
+            <button
+                class="card"
+                onclick="selectPreset('Travel')">
+
+                <div class="card-icon">
+                    ✈️
+                </div>
+
+                <h3>
+                    Travel
+                </h3>
+
+                <p>
+                    Important travel belongings
+                </p>
+
+            </button>
+
+
+
+            <button
+                class="card custom-card"
+                onclick="selectCustom()">
+
+                <div class="card-icon">
+                    ✨
+                </div>
+
+                <h3>
+                    Custom
+                </h3>
+
+                <p>
+                    Create your own checklist
+                </p>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= SELECTED CHECKLIST ================= -->
+
+    <section
+        id="checklistArea"
+        class="checklist-area hidden">
+
+        <div class="checklist-box">
+
+
+            <div class="checklist-header">
+
+                <div>
+
+                    <p class="small-title">
+                        YOUR CHECKLIST
+                    </p>
+
+                    <h2 id="checklistTitle">
+                        College
+                    </h2>
+
+                </div>
+
+
+                <button
+                    class="change-btn"
+                    onclick="changeChecklist()">
+
+                    Change
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="items"
+                class="items">
+            </div>
+
+
+            <button
+                class="scan-btn"
+                onclick="startScan()">
+
+                📷 Scan My Belongings
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= CUSTOM CHECKLIST ================= -->
+
+    <section
+        id="customArea"
+        class="custom-area hidden">
+
+        <div class="custom-box">
+
+            <p class="small-title">
+                CREATE YOUR OWN
+            </p>
+
+            <h2>
+                What's going in your bag?
+            </h2>
+
+            <p>
+                Add the things you don't want to forget.
+            </p>
+
+
+            <div class="add-item">
+
+                <input
+                    type="text"
+                    id="itemInput"
+                    placeholder="e.g. Sunglasses">
+
+                <button onclick="addItem()">
+                    Add
+                </button>
+
+            </div>
+
+
+            <div id="customItems">
+            </div>
+
+
+            <button
+                class="scan-btn"
+                onclick="startCustomScan()">
+
+                📷 Scan My Belongings
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= LIVE SCAN ================= -->
+
+    <section
+        id="scanArea"
+        class="scan-area hidden">
+
+        <div class="scan-box">
+
+            <p class="small-title">
+                LIVE AI SCAN
+            </p>
+
+            <h2>
+                Scan Your Belongings
+            </h2>
+
+            <p>
+                Place your belongings in front of the camera.
+                BagCheck AI will detect visible objects.
+            </p>
+
+
+
+            <!-- CAMERA -->
+
+            <div class="camera-container">
+
+                <img
+                    src="{{ url_for('video_feed') }}"
+                    class="camera-feed"
+                    alt="Live YOLO camera">
+
+            </div>
+
+
+
+            <!-- LIVE STATUS -->
+
+            <div class="scan-status">
+
+                <span class="live-dot"></span>
+
+                AI detection is running
+
+            </div>
+
+
+
+            <!-- DETECTION RESULTS -->
+
+            <div class="detection-results">
+
+                <h3>
+                    Detected Items
+                </h3>
+
+
+                <div
+                    id="detectedItems"
+                    class="detected-list">
+
+                    Waiting for objects...
+
+                </div>
+
+
+
+                <!-- FOUND / MISSING -->
+
+                <div class="result-summary">
+
+
+                    <!-- FOUND -->
+
+                    <div class="result-column">
+
+                        <h3>
+                            ✅ Found
+                        </h3>
+
+                        <div id="foundItems">
+
+                            <p>
+                                Waiting for detection...
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- MISSING -->
+
+                    <div class="result-column">
+
+                        <h3>
+                            ❌ Missing
+                        </h3>
+
+                        <div id="missingItems">
+
+                            <p>
+                                Waiting for detection...
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+
+<script>
+
+
+/* =========================================================
+   PRESET CHECKLISTS
+   ========================================================= */
+
+
+const presets = {
+
+    "College": [
+
+        "Phone",
+        "Wallet",
+        "ID Card",
+        "Notebook",
+        "Pen",
+        "Water Bottle",
+        "Earbuds",
+        "Lip Gloss",
+        "Sanitizer",
+        "Tiffin"
+
+    ],
+
+
+    "Day Outing": [
+
+        "Phone",
+        "Earbuds",
+        "Wallet",
+        "Sunglasses",
+        "Lip Gloss",
+        "Sanitizer",
+        "Tissue Paper"
+
+    ],
+
+
+    "Gym": [
+
+        "Phone",
+        "Water Bottle",
+        "Earbuds",
+        "Towel",
+        "Sanitizer"
+
+    ],
+
+
+    "Travel": [
+
+        "Phone",
+        "Wallet",
+        "Keys",
+        "Charger",
+        "Sanitizer",
+        "Travel Documents",
+        "Water Bottle"
+
+    ]
+
+};
+
+
+
+/* =========================================================
+   GLOBAL VARIABLES
+   ========================================================= */
+
+
+let customItems = [];
+let currentChecklist = [];
+let confirmedItems = [];
+let manualConfirmedItems = [];
+
+
+
+/*
+   Once YOLO detects an item even once,
+   it stays FOUND during the current scan.
+*/
+
+
+
+/* =========================================================
+   NORMALIZE ITEM NAME
+   ========================================================= */
+
+
+function normalizeItem(item) {
+
+    return String(item)
+        .trim()
+        .toLowerCase()
+        .replace(/[_-]+/g, " ")
+        .replace(/\s+/g, " ");
+
+}
+
+
+
+/* =========================================================
+   CHECK WHETHER TWO ITEMS MATCH
+   ========================================================= */
+
+
+function itemsMatch(item1, item2) {
+
+    return normalizeItem(item1) ===
+           normalizeItem(item2);
+
+}
+function confirmManualItem(item) {
+    if (
+        !manualConfirmedItems.some(
+            confirmedItem => itemsMatch(confirmedItem, item)
+        )
+    ) {
+        manualConfirmedItems.push(item);
+        confirmedItems.push(item);
+        updateDetections();
+    }
+}
+
+const MANUAL_ITEMS = [
+    "ID Card",
+    "Travel Documents"
+];
+
+function confirmManualItem(item) {
+    if (
+        !confirmedItems.some(
+            confirmedItem => itemsMatch(confirmedItem, item)
+        )
+    ) {
+        confirmedItems.push(item);
+        updateDetections();
+    }
+}
+/* =========================================================
+   SELECT PRESET
+   ========================================================= */
+
+
+function selectPreset(name) {
+
+    document
+        .getElementById("customArea")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("scanArea")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("checklistArea")
+        .classList.remove("hidden");
+
+
+    document
+        .getElementById("checklistTitle")
+        .innerText = name;
+
+
+    /* Save checklist */
+
+    currentChecklist = [...presets[name]];
+
+
+    /* New scan */
+
+    confirmedItems = [];
+    manualConfirmedItems = [];
+
+
+    const itemsContainer =
+        document.getElementById("items");
+
+
+    itemsContainer.innerHTML = "";
+
+
+    presets[name].forEach(item => {
+
+        const div =
+            document.createElement("div");
+
+
+        div.className = "check-item";
+
+
+        div.innerHTML = `
+
+            <span>
+                ${item}
+            </span>
+
+            <span class="status">
+                Waiting for scan
+            </span>
+
+        `;
+
+
+        itemsContainer.appendChild(div);
+
+    });
+
+
+    resetResults();
+
+
+    document
+        .getElementById("checklistArea")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+
+/* =========================================================
+   RESET RESULTS
+   ========================================================= */
+
+
+function resetResults() {
+
+    document
+        .getElementById("detectedItems")
+        .innerHTML =
+        "Waiting for objects...";
+
+
+    document
+        .getElementById("foundItems")
+        .innerHTML =
+        "<p>Waiting for detection...</p>";
+
+
+    document
+        .getElementById("missingItems")
+        .innerHTML =
+        "<p>Waiting for detection...</p>";
+
+}
+
+
+
+/* =========================================================
+   CUSTOM CHECKLIST
+   ========================================================= */
+
+
+function selectCustom() {
+
+    document
+        .getElementById("checklistArea")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("scanArea")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("customArea")
+        .classList.remove("hidden");
+
+
+    confirmedItems = [];
+    manualConfirmedItems = [];
+
+
+    document
+        .getElementById("customArea")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+
+/* =========================================================
+   ADD CUSTOM ITEM
+   ========================================================= */
+
+
+function addItem() {
+
+    const input =
+        document.getElementById("itemInput");
+
+
+    const item =
+        input.value.trim();
+
+
+    if (item === "") {
+
+        return;
+
+    }
+
+
+    /*
+       Prevent duplicate checklist items.
+    */
+
+    const alreadyExists =
+        customItems.some(existingItem =>
+            itemsMatch(existingItem, item)
+        );
+
+
+    if (alreadyExists) {
+
+        input.value = "";
+
+        return;
+
+    }
+
+
+    customItems.push(item);
+
+
+    input.value = "";
+
+
+    displayCustomItems();
+
+}
+
+
+
+/* =========================================================
+   DISPLAY CUSTOM ITEMS
+   ========================================================= */
+
+
+function displayCustomItems() {
+
+    const container =
+        document.getElementById("customItems");
+
+
+    container.innerHTML = "";
+
+
+    customItems.forEach((item, index) => {
+
+        const div =
+            document.createElement("div");
+
+
+        div.className = "check-item";
+
+
+        div.innerHTML = `
+
+            <span>
+                ${item}
+            </span>
+
+            <button
+                onclick="removeItem(${index})">
+
+                ×
+
+            </button>
+
+        `;
+
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+
+/* =========================================================
+   REMOVE CUSTOM ITEM
+   ========================================================= */
+
+
+function removeItem(index) {
+
+    customItems.splice(index, 1);
+
+    displayCustomItems();
+
+}
+
+
+
+/* =========================================================
+   CHANGE CHECKLIST
+   ========================================================= */
+
+
+function changeChecklist() {
+
+    document
+        .getElementById("checklistArea")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("scanArea")
+        .classList.add("hidden");
+
+
+    confirmedItems = [];
+    manualConfirmedItems = [];
+
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+    });
+
+}
+
+
+
+/* =========================================================
+   START SCAN
+   ========================================================= */
+
+
+function startScan() {
+
+    if (currentChecklist.length === 0) {
+
+        alert(
+            "Please select a checklist first."
+        );
+
+        return;
+
+    }
+
+
+    document
+        .getElementById("scanArea")
+        .classList.remove("hidden");
+
+
+    document
+        .getElementById("scanArea")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+
+/* =========================================================
+   START CUSTOM SCAN
+   ========================================================= */
+
+
+function startCustomScan() {
+
+    if (customItems.length === 0) {
+
+        alert(
+            "Please add at least one item."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Save custom checklist.
+    */
+
+    currentChecklist =
+        [...customItems];
+
+
+    /*
+       Start completely new scan.
+    */
+
+    confirmedItems = [];
+
+
+    /*
+       Show scan.
+    */
+
+    startScan();
+
+}
+
+
+
+/* =========================================================
+   UPDATE YOLO DETECTIONS
+   ========================================================= */
+
+
+async function updateDetections() {
+
+    try {
+
+
+        /* -----------------------------------------
+           GET DETECTIONS FROM FLASK
+           ----------------------------------------- */
+
+        const response =
+            await fetch("/detections");
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Detection request failed"
+            );
+
+        }
+
+
+        const detectedItems =
+            await response.json();
+
+
+
+        /* -----------------------------------------
+           GET UI ELEMENTS
+           ----------------------------------------- */
+
+        const detectedContainer =
+            document.getElementById(
+                "detectedItems"
+            );
+
+
+        const foundContainer =
+            document.getElementById(
+                "foundItems"
+            );
+
+
+        const missingContainer =
+            document.getElementById(
+                "missingItems"
+            );
+
+
+
+        /* -----------------------------------------
+           CURRENT DETECTED OBJECTS
+           ----------------------------------------- */
+
+        if (
+            !Array.isArray(detectedItems) ||
+            detectedItems.length === 0
+        ) {
+
+            detectedContainer.innerHTML =
+                "No supported belongings detected right now.";
+
+        }
+
+        else {
+
+            detectedContainer.innerHTML =
+
+                detectedItems
+                    .map(item => `
+
+                        <span class="detected-tag">
+                            ${item}
+                        </span>
+
+                    `)
+                    .join("");
+
+        }
+
+
+
+        /* -----------------------------------------
+           CONFIRM DETECTED CHECKLIST ITEMS
+           -----------------------------------------
+
+           IMPORTANT:
+
+           We DO NOT use:
+
+               currentChecklist.includes(item)
+
+           because YOLO names and checklist names
+           may differ slightly in capitalization,
+           spaces, "_" or "-".
+
+           Instead we use itemsMatch().
+           ----------------------------------------- */
+
+
+        detectedItems.forEach(detectedItem => {
+
+    const matchingChecklistItem =
+        currentChecklist.find(
+            checklistItem =>
+                itemsMatch(
+                    checklistItem,
+                    detectedItem
+                )
+        );
+
+    if (
+        matchingChecklistItem &&
+        !confirmedItems.some(
+            confirmedItem =>
+                itemsMatch(
+                    confirmedItem,
+                    matchingChecklistItem
+                )
+        )
+    ) {
+
+        confirmedItems.push(
+            matchingChecklistItem
+        );
+
+    }
+
+});
+
+
+        /* -----------------------------------------
+           FOUND ITEMS
+           ----------------------------------------- */
+
+        const found =
+    currentChecklist.filter(
+        checklistItem =>
+            confirmedItems.some(
+                confirmedItem =>
+                    itemsMatch(
+                        confirmedItem,
+                        checklistItem
+                    )
+            )
+    );
+
+
+
+        /* -----------------------------------------
+           MISSING ITEMS
+           ----------------------------------------- */
+
+        const missing =
+    currentChecklist.filter(
+        checklistItem =>
+            !confirmedItems.some(
+                confirmedItem =>
+                    itemsMatch(
+                        confirmedItem,
+                        checklistItem
+                    )
+            )
+    );
+
+
+
+        /* -----------------------------------------
+           UPDATE MAIN CHECKLIST
+           ----------------------------------------- */
+
+        const checklistItems =
+            document.querySelectorAll(
+                "#items .check-item"
+            );
+
+
+        checklistItems.forEach(
+            (element, index) => {
+
+
+                const item =
+                    currentChecklist[index];
+
+
+                const status =
+                    element.querySelector(
+                        ".status"
+                    );
+
+
+                if (!status) {
+
+                    return;
+
+                }
+
+
+                const isFound =
+                    confirmedItems.some(
+                        confirmedItem =>
+                            itemsMatch(
+                                confirmedItem,
+                                item
+                            )
+                    );
+
+
+
+                if (isFound) {
+
+                    element.classList.add(
+                        "item-found"
+                    );
+
+
+                    status.innerText =
+                        "✅ Found";
+
+
+                    status.className =
+                        "status found-status";
+
+                }
+
+                else {
+
+                    element.classList.remove(
+                        "item-found"
+                    );
+
+
+                    status.innerText =
+                        "❌ Missing";
+
+
+                    status.className =
+                        "status missing-status";
+
+                }
+
+            }
+        );
+
+
+
+        /* -----------------------------------------
+           FOUND ITEMS SECTION
+           ----------------------------------------- */
+
+        if (found.length === 0) {
+
+            foundContainer.innerHTML =
+                "<p>Nothing detected yet.</p>";
+
+        }
+
+        else {
+
+            foundContainer.innerHTML =
+
+                found
+                    .map(item => `
+
+                        <div class="result-item found">
+                            ${item}
+                        </div>
+
+                    `)
+                    .join("");
+
+        }
+
+
+
+        /* -----------------------------------------
+           MISSING ITEMS SECTION
+           ----------------------------------------- */
+
+        if (missing.length === 0) {
+
+            missingContainer.innerHTML =
+                "<p>Everything found! 🎉</p>";
+
+        }
+
+        else {
+
+            missingContainer.innerHTML =
+
+                missing
+    .map(item => `
+
+        <div class="result-item missing">
+            ${item}
+
+            ${
+                MANUAL_ITEMS.some(
+                    manualItem => itemsMatch(manualItem, item)
+                )
+                ? `
+                    <button onclick="confirmManualItem('${item}')">
+                        ✓ Confirm
+                    </button>
+                  `
+                : ""
+            }
+
+        </div>
+
+    `)
+    .join("");
+
+        }
+
+    }
+
+
+    catch (error) {
+
+        console.log(
+            "Detection update error:",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   CHECK FOR NEW DETECTIONS EVERY SECOND
+   ========================================================= */
+
+
+setInterval(
+    updateDetections,
+    1000
+);
+
+
+</script>
+
+
+</body>
+
+</html>
