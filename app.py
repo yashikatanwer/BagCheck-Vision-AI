@@ -7,8 +7,7 @@ from ultralytics import YOLO
 
 app = Flask(__name__)
 
-model = YOLO("runs/detect/train-4/weights/best.pt")
-
+model = YOLO("best.pt")
 latest_detections = []
 
 # ---------------------------------------------------------
